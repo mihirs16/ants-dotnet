@@ -15,17 +15,21 @@ public class Ant {
     }
 
     public void Behaviour() {
-        Thread.Sleep(2000);
+        if (queen.cancellationTokenSource.IsCancellationRequested) {
+            Console.WriteLine($"{this} is done.");
+            return;
+        }
 
-        // generate a random user from the queen
+        int sleepTimeMultiplier = randomGenerator.Next(11);
+        int sleepTime = sleepTimeMultiplier * 100;
+        Thread.Sleep(sleepTime);
+
         int randomId = randomGenerator.Next(queen.numAnts);
-
-        // get user from queen's directory
         Ant receiverAnt = queen.getAntFromId(randomId);
-
-        // send a message to the user
         queen.sendMessage(new Message(this, receiverAnt, "Hello!"));
+
+        Behaviour();
     }
 
-    public override string ToString() => String.Format("{0}", name);   
+    public override string ToString() => $"{this.name}";   
 }
