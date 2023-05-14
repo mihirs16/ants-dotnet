@@ -23,7 +23,7 @@ public class Queen {
         Console.WriteLine("---------------------------");
         for (int i = 0; i < numAnts; i++) {
             Faker faker = new Faker();
-            this.ants[i] = new Ant(this, faker.Person.UserName);
+            this.ants[i] = new Ant(this, faker.Person.UserName, i);
         }
 
         List<Thread> threads = new List<Thread>();
