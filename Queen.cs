@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using Bogus;
 
 namespace ants_dotnet;
 public class Queen {
@@ -15,9 +16,11 @@ public class Queen {
         this.messages = new BlockingCollection<Message>(this.numMessages);
         this.cancellationTokenSource = new CancellationTokenSource();
 
-        Console.WriteLine("Spawning {0} ants...", numAnts);
-        for (int i = 0; i < numAnts; i++)
-            this.ants[i] = new Ant(this, i);
+        Console.WriteLine($"Spawning {numAnts} ants...");
+        for (int i = 0; i < numAnts; i++) {
+            Faker faker = new Faker();
+            this.ants[i] = new Ant(this, faker.Person.UserName);
+        }
 
         Console.WriteLine("Starting ants' behaviour...");
         for (int i = 0; i < numAnts; i++)
