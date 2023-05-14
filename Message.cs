@@ -11,5 +11,5 @@ public class Message {
     }
 
     override public string ToString () 
-        => $"From: {sender.name} | To: {receiver.name} | Message: {message}";
+        => $"From: {sender.name, -20} | To: {receiver.name, -20} | Message: {message, -50}";
 }

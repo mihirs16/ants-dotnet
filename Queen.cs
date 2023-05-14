@@ -18,14 +18,18 @@ public class Queen {
         this.messages = new Queue<Message>(this.numMessages);
         this.cancellationTokenSource = new CancellationTokenSource();
 
+        Console.WriteLine("\n---------------------------");
         Console.WriteLine($"Spawning {numAnts} ants...");
+        Console.WriteLine("---------------------------");
         for (int i = 0; i < numAnts; i++) {
             Faker faker = new Faker();
             this.ants[i] = new Ant(this, faker.Person.UserName);
         }
 
         List<Thread> threads = new List<Thread>();
+        Console.WriteLine("\n---------------------------");
         Console.WriteLine("Starting ants' behaviour...");
+        Console.WriteLine("---------------------------");
         for (int i = 0; i < numAnts; i++) {
             Thread thread = new Thread(this.ants[i].Behaviour);
             threads.Add(thread);
@@ -56,35 +60,22 @@ public class Queen {
             from message in this.messages
             group message by message.sender.name into groupedBySender
             select groupedBySender;
-        foreach (var messageGroup in messagesGroupedBySender)
-            Console.WriteLine($"{messageGroup.First().sender} sent {messageGroup.Count()} messages.");
 
         IEnumerable<IGrouping<string, Message>> messagesGroupedByReceiver =
             from message in this.messages
             group message by message.receiver.name into groupedByReceiver
             select groupedByReceiver;
+
+        Console.WriteLine("\n---------------------------");
+        Console.WriteLine("Sent Messages");
+        Console.WriteLine("---------------------------");
+        foreach (var messageGroup in messagesGroupedBySender)
+            Console.WriteLine($"{messageGroup.First().sender, -20} | {messageGroup.Count(), -5}");
+
+        Console.WriteLine("\n---------------------------");
+        Console.WriteLine("Received Messages");
+        Console.WriteLine("---------------------------");
         foreach (var messageGroup in messagesGroupedByReceiver)
-            Console.WriteLine($"{messageGroup.First().receiver} received {messageGroup.Count()} messages.");
-    }
-}
-
-class Program {
-    static void Main (string[] args) {
-        int numAnts = 0;
-        int numMessages = 0;
-        try {
-            numAnts = int.Parse(args[0]);
-            numMessages = int.Parse(args[1]);
-        }
-        catch {
-            Console.WriteLine("Usage: ./ants-dotnet [num_ants] [num_messages]");
-            return;
-        }
-        
-        Console.WriteLine("Spawning a queen...");
-        Queen queen = new Queen(numAnts, numMessages);
-
-        Console.WriteLine("Displaying stats...");
-        queen.displayStats();
+            Console.WriteLine($"{messageGroup.First().receiver, -20} | {messageGroup.Count(), -5} ");
     }
 }
